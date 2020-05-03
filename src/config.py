@@ -3,6 +3,11 @@
 import os 
 import shutil
 
+
+def rm(path):
+  if os.path.exists(path):
+    shutil.rmtree(path)
+
 class Config:
   ## Data configuration 
   dataset = "quora" # ["mscoco", "quora", 'wikibio']
@@ -96,7 +101,7 @@ class Config:
   # system setting 
   gpu_id = "0"
   controller_mode = "train"
-  save_ckpt = False
+  save_ckpt = True
   lm_load_path = "/home/francis/hdd/Columbia/dgm_yf2470/models/lm_0.1.0/model-e7.ckpt"
 
   # training hyperparameters
@@ -180,9 +185,9 @@ class Config:
         "model %s already existed, overwite[o]; continue[c] or exit[e]?\n" % model)
 
       if(inp == "o"):
-        shutil.rmtree(model_path)
+        rm(model_path)
         os.mkdir(model_path)
-        shutil.rmtree(output_path)
+        rm(output_path)
         os.mkdir(output_path)
       elif(inp == "e"):
         print("exiting the program, please rename the model")
