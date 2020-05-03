@@ -186,16 +186,16 @@ class Config:
 
       if(inp == "o"):
         rm(model_path)
-        os.mkdir(model_path)
+        os.makedirs(model_path)
         rm(output_path)
-        os.mkdir(output_path)
+        os.makedirs(output_path)
       elif(inp == "e"):
         print("exiting the program, please rename the model")
         sys.exit(1)
       else: pass 
     else:
-      os.mkdir(model_path)
-      os.mkdir(output_path)
+      os.makedirs(model_path)
+      os.makedirs(output_path)
     
     self.model_path = model_path
     self.output_path = output_path + "/"
