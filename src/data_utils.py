@@ -53,6 +53,30 @@ def quora_read(file_path, bleu_baseline=False):
     print("bleu on the training set: %.4f" % bleu)
   return sentence_sets
 
+
+def imdb62_read(src, tgt, bleu_baseline=False):
+  def prepr(sent):
+    return word_tokenize(sent)
+
+  """Read the quora dataset"""
+  print("Reading imdb62 data .. ")
+  with open(src) as fd:
+    lines_src = fd.readlines()
+  with open(tgt) as fd:
+    lines_tgt = fd.readlines()
+  sentence_sets = []
+  for l_src, l_tgt in tqdm(zip(lines_src, lines_tgt)):
+    sentence_sets.append([prepr(l_src), prepr(l_tgt)])
+
+  if(bleu_baseline):
+    print("calculating bleu ... ")
+    hypothesis = [s[0] for s in sentence_sets]
+    references = [s[1:] for s in sentence_sets]
+    bleu = corpus_bleu(references, hypothesis)
+    print("bleu on the training set: %.4f" % bleu)
+  return sentence_sets
+
+
 def mscoco_read_json(file_path, bleu_baseline=False):
   """Read the mscoco dataset
 
@@ -421,6 +445,10 @@ def train_dev_split(dataset_name, train_sets, ratio=0.8):
       if(i in val_index): dev.append(train_sets[i])
       else: train.append(train_sets[i])
 
+  elif dataset_name == 'imdb62':
+    split_i = int(len(train_sets) * ratio)
+    train, dev = train_sets[:split_i], train_sets[split_i:]
+
   print("Size of training set: %d" % len(train))
   print("Size of test set: %d" % len(dev))
   return train, dev
@@ -483,6 +511,8 @@ class Dataset(object):
       train_sentences = mscoco_read_json(self.dataset_path["train"])
     elif(self.dataset == "quora"):
       train_sentences = quora_read(self.dataset_path["train"])
+    elif self.dataset == 'imdb62':
+      train_sentences = imdb62_read(self.dataset_path["train-src"], self.dataset_path["train-tgt"])
 
     # corpus_statistics(train_sentences)
 

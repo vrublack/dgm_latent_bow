@@ -25,6 +25,11 @@ class Config:
     "quora": {
       "train": "../data/quora/train.txt", 
       "test": ""
+    },
+    "imdb62": {
+      "train-src": "../data/imdb62/imdb62.en",
+      "train-tgt": "../data/imdb62/imdb62.enbtdepr",
+      "test": ""
     }
   }
 
@@ -32,7 +37,8 @@ class Config:
 
   max_sent_len = {"mscoco": 16, 
                   'mscoco14': 16, 
-                  "quora": 20} # 95 percentile 
+                  "quora": 20,
+                   "imdb62": 15} # 95 percentile
   max_enc_len = {'wikibio': 85}
   max_dec_len = {'wikibio': 42}
   vocab_size = -1
